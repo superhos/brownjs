@@ -8,6 +8,7 @@ class AdminController extends Controller{
 	}
 
 	async index(){
+		console.log('idnex');
 		var result = await DB.findById("user",1,['id','name','age']);
 		this.view.assign('title',result[0].name);
 		this.view.display('index.ejs');

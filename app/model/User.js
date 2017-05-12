@@ -8,8 +8,8 @@ class User extends Model{
 	}
 
 	//验证
-	verify(){
-
+	verify(req){
+		
 	}
 }
 

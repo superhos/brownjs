@@ -1,5 +1,5 @@
 //引擎缓存
-let Engines = [];
+let Engines = {};
 
 class Engine{
 	static createEngine(engineType){

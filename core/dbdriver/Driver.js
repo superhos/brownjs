@@ -1,12 +1,12 @@
 import {firstUpperCase} from '../Common.js'
 import Brown from '../Brown.js'
 //引擎缓存
-let drivers = [];
+let drivers = {};
 
 class Driver{
 	static getDB(){
 		var dbdriver = Brown.getInstance().get('db').driver;
-		if (drivers[dbdriver]){
+		if (typeof drivers[dbdriver] !== "undefined"){
 			return drivers[dbdriver];
 		}
 		var dbdriverClass = require('./drivers/'+firstUpperCase(dbdriver)+'Driver.js');

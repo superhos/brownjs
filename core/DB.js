@@ -1,4 +1,5 @@
 import driver from './dbdriver/Driver.js'
+require("babel-polyfill");
 /**
  * DB 直接操作类 跟Record配合使用
  */
@@ -10,18 +11,9 @@ class DB{
 	 * @return {int} 插入状态
 	 */
 	static async save(table,record){
-		var sql = "INSERT INTO {table} (";
-		var result = "(";
-		record.foreach(function(i,v){
-			sql += i + ',';
-			result += "'"+v+"',";
-		});
-		result = result.substring(0,result.length-1) + ')';
-		sql = sql.substring(0,sql.length-1) + ') VALUES ' + result + ';';
-		sql = sql.replace(/{table}/g,table);
 		var db = driver.getDB();
 		try{
-			var result = await db.query(sql);
+			var result = await db.save(table,record);
 		}catch(err){
 			console.log(err);
 		}
@@ -38,19 +30,8 @@ class DB{
 	 * @return {int} 删除状态
 	 */
 	static async deleteById(table,id,id_name){
-		if (typeof fields === "table"){
-			throw new Error('Table cannot be null');
-		}
-		if (typeof fields === "id"){
-			throw new Error('id cannot be null');
-		}
-		if (typeof id_name === "undefined"){
-			id_name = 'id';
-		}
-		var sql = "DELETE FROM {table} WHERE {id_name} = {id}";
-		sql = sql.replace(/{id_name}/g,id_name).replace(/{id}/g,id).replace(/{table}/g,table);
 		var db = driver.getDB();
-		var result = await db.query(sql);
+		var result = await db.deleteById(table,id,id_name);
 		return new Promise(function(resolve,reject){
 			resolve(result[0]);
 		});
@@ -65,19 +46,8 @@ class DB{
 	 * @return {Object}	
 	 */
 	static async findById(table,id,fields,id_name){
-		if (typeof fields === "undefined"){
-			fields = "*";
-		}
-		if (typeof fields === "Array"){
-			fields = fields.join(',');
-		}
-		if (typeof id_name === "undefined"){
-			id_name = 'id';
-		}
-		var sql = "SELECT {fields} FROM {table} WHERE {id_name} = {id}";
-		sql = sql.replace(/{id_name}/g,id_name).replace(/{id}/g,id).replace(/{table}/g,table).replace(/{fields}/g,fields);
 		var db = driver.getDB();
-		var result = await db.query(sql);
+		var result = await db.findById(table,id,fields,id_name);
 		return new Promise(function(resolve,reject){
 			resolve(result[0]);
 		});
@@ -107,16 +77,8 @@ class DB{
 	 * @return {Array<Record>} record集
 	 */
 	static async findAll(table,fields){
-		if (typeof fields === "undefined"){
-			fields = "*";
-		}
-		if (typeof fields === "Array"){
-			fields = fields.join(',');
-		}
-		var sql = "SELECT {fields} FROM {table}";
-		sql = sql.replace(/{table}/g,table).replace(/{fields}/g,fields);
 		var db = driver.getDB();
-		var result = await db.query(sql);
+		var result = await db.findAll(sql);
 		return new Promise(function(resolve,reject){
 			resolve(result[0]);
 		});
