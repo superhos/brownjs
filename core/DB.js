@@ -18,8 +18,8 @@ class DB{
 			console.log(err);
 		}
 		return new Promise(function(resolve,reject){
-			console.log(result);
-			resolve(result[0].insertId);
+			// console.log("DB.js : " + result);
+			resolve(result);
 		});
 	}
 
@@ -33,6 +33,7 @@ class DB{
 		var db = driver.getDB();
 		var result = await db.deleteById(table,id,id_name);
 		return new Promise(function(resolve,reject){
+			// console.log(resolve);
 			resolve(result[0]);
 		});
 	}

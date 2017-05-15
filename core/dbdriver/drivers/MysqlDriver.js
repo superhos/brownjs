@@ -92,8 +92,9 @@ class MysqlDriver{
 		});
 	}
 
-	save(table,record){
+	async save(table,record){
 		var sql = "INSERT INTO {table} (";
+		sql = sql.replace(/{table}/g,table);
 		var result = "(";
 		record.foreach(function(i,v){
 			sql += i + ',';
@@ -101,14 +102,13 @@ class MysqlDriver{
 		});
 		result = result.substring(0,result.length-1) + ')';
 		sql = sql.substring(0,sql.length-1) + ') VALUES ' + result + ';';
-		sql = sql.replace(/{table}/g,table);
 		try{
 			var result = await this.query(sql);
 		}catch(err){
 			console.log(err);
 		}
 		return new Promise(function(resolve,reject){
-			console.log(result);
+			// console.log(result);
 			resolve(result[0].insertId);
 		});
 	}
